@@ -22,10 +22,11 @@ listRef.insertAdjacentHTML('beforeend', markup);
 listRef.addEventListener('click', handleImageClick);
 
 function handleImageClick(event) { 
-    event.preventDefault();
-    console.dir(event.target);
+  event.preventDefault();
+  const instance = basicLightbox.create(`<img src=${event.target.dataset.source}>`);
+  instance.show();  
+  document.body.addEventListener('keydown', (evt) => {
+    if (evt.key === "Escape") instance.close();
+});
 }
 
-
-
-console.log(galleryItems);
