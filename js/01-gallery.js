@@ -20,24 +20,19 @@ function renderArrayElements(array) {
 const markup = renderArrayElements(galleryItems);
 listRef.insertAdjacentHTML('beforeend', markup);
 listRef.addEventListener('click', handleImageClick);
-const closeByEsc = function (evt, instance) {
+const instance = basicLightbox.create(`<img class="modal-img" src="">`,
+  {
+    onShow: (instance) => { window.addEventListener('keydown', closeByEsc) },
+    onClose: (instance) => { window.removeEventListener('keydown', closeByEsc) }
+  });
+const closeByEsc = function (evt) {
   if (evt.key === "Escape") instance.close();
 };
 
 function handleImageClick(event) { 
   event.preventDefault();
-  const instance = basicLightbox.create(`<img src=${event.target.dataset.source}>`,
-    {
-      onShow: (instance) => {
-        window.addEventListener('keydown', closeByEsc(evt, instance))
-      },
-      onClose: (instance) => {
-        window.removeEventListener('keydown', closeByEsc(evt, instance))
-      }
-    });
+  if (event.target.nodeName !== 'IMG') return;
+  instance.element().querySelector('.modal-img').src = event.target.dataset.source;
   instance.show();  
-//   document.body.addEventListener('keydown', (evt) => {
-//     if (evt.key === "Escape") instance.close();
-// });
 }
 
